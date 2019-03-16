@@ -1,5 +1,5 @@
 defmodule Device do
-  defstruct Location: "",
+  defstruct location: "",
             id: 0,
             model: "",
             fw_ver: 0,

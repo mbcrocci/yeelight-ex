@@ -5,9 +5,10 @@ end
 
 defmodule Command do
   def sendTo(command, device) do
-    json = Poison.encode!(command)
+    json = Poison.encode!(command) |> IO.inspect(label: "JSON => ")
+    url = device.location |> String.replace("yeelight", "http") |> IO.inspect(label: "URL => ")
 
-    HTTPoison.post(device."Location", json, [{"Content-Type", "application/json"}])
+    HTTPoison.post(url, json <> "\r\n", [{"Content-Type", "application/json"}])
     |> Result.parse_result()
   end
 
