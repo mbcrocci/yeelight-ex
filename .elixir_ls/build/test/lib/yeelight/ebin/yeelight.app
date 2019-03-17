@@ -1,9 +1,9 @@
 {application,yeelight,
-             [{applications,[kernel,stdlib,elixir,logger,poison,httpoison]},
-              {description,"yeelight"},
+             [{applications,[kernel,stdlib,elixir,poison,httpoison]},
+              {description,"This is a library to comunicate with yeelight lamps using Elixir.\nFor discovering the lights it uses a UPnP server that should be started using `Discover.start`"},
               {modules,['Elixir.Command','Elixir.CommandMessage',
                         'Elixir.Device','Elixir.Discover',
                         'Elixir.Discover.State','Elixir.Result',
                         'Elixir.Yeelight']},
               {registered,[]},
-              {vsn,"0.1.0"}]}.
+              {vsn,"0.1.2"}]}.
