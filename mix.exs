@@ -8,7 +8,7 @@ defmodule Yeelight.MixProject do
       version: "0.1.2",
       elixir: "~> 1.8",
       description: description(),
-      name: "yeelight-ex",
+      name: "yeelight",
       links: %{"source" => "https://github.com/mbcrocci/yeelight-ex"},
       source_url: "https://github.com/mbcrocci/yeelight-ex",
       start_permanent: Mix.env() == :prod,
@@ -29,7 +29,7 @@ defmodule Yeelight.MixProject do
 
   defp package() do
     [
-      name: "yeelight-ex",
+      name: "yeelight",
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/mbcrocci/yeelight-ex"}
     ]
@@ -39,7 +39,8 @@ defmodule Yeelight.MixProject do
   defp deps do
     [
       {:poison, "~> 3.1"},
-      {:httpoison, "~> 1.4"}
+      {:httpoison, "~> 1.4"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 end

@@ -1,6 +1,21 @@
 # Yeelight
 
-**TODO: Add description**
+This is a library to comunicate with yeelight lamps using Elixir.
+
+For discovering the lights it uses a UPnP server that should be started using `Discover.start`"
+
+
+```elixir
+
+# start the discovery server
+Discover.start
+
+# Get the device list
+devices = Discover.devices
+
+# Send a command
+Command.toggle |> Command.sendTo(device)
+```
 
 ## Installation
 
