@@ -123,6 +123,10 @@ defmodule Discover do
     {:noreply, device |> parse_device |> update_devices(state)}
   end
 
+  def handle_info({:udp, _s, _ip, _port, <<"NOTIFY * HTTP/1.1\r\n", device::binary>>}, state) do
+    {:noreply, device |> parse_device |> update_devices(state)}
+  end
+
   def parse_device(body) do
     raw_params = String.split(body, ["\r\n", "\n"])
 
@@ -141,6 +145,7 @@ defmodule Discover do
       |> Map.delete(:date)
       |> Map.delete(:ext)
       |> Map.delete(:server)
+      |> Map.delete(:host)
 
     struct!(Device, map)
   end

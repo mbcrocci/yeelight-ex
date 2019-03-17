@@ -12,6 +12,8 @@
 defmodule Result do
   def parse_result({:ok, response}) do
     response
+    |> Poison.decode!()
+    |> IO.inspect()
     |> handle_result()
   end
 
@@ -21,6 +23,7 @@ defmodule Result do
   end
 
   def handle_result(%{"id" => id, "result" => "ok"}), do: {:ok, id}
+  def handle_result(%{"id" => id, "result" => ["ok"]}), do: {:ok, id}
   def handle_result(%{"id" => id, "result" => properties}), do: {:ok, id, properties}
   def handle_result(%{"id" => id, "error" => error}), do: {:error, id, error["message"]}
 end

@@ -39,7 +39,6 @@ defmodule Yeelight.MixProject do
   defp deps do
     [
       {:poison, "~> 3.1"},
-      {:httpoison, "~> 1.4"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end

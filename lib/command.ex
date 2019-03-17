@@ -7,9 +7,20 @@ defmodule Command do
   def sendTo(command, device) do
     json = Poison.encode!(command) |> IO.inspect(label: "JSON => ")
     url = device.location |> String.replace("yeelight", "http") |> IO.inspect(label: "URL => ")
+    uri = url |> URI.parse() |> IO.inspect()
 
-    HTTPoison.post(url, json <> "\r\n", [{"Content-Type", "application/json"}])
-    |> Result.parse_result()
+    {:ok, socket} =
+      :gen_tcp.connect(
+        uri.host |> String.to_charlist(),
+        uri.port,
+        [:binary, {:active, false}]
+      )
+
+    :ok = :gen_tcp.send(socket, json <> "\r\n")
+    result = :gen_tcp.recv(socket, 0) |> Result.parse_result()
+    :ok = :gen_tcp.close(socket)
+
+    result
   end
 
   @spec build_command(integer(), binary(), maybe_improper_list()) :: CommandMessage.t()
