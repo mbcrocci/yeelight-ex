@@ -4,15 +4,16 @@ defmodule Yeelight.MixProject do
   def project do
     [
       app: :yeelight,
+      licenses: "MIT License",
       version: "0.1.2",
       elixir: "~> 1.8",
       description: description(),
-      name: "yeeligh-ex",
-      licenses: ["MIT License"],
+      name: "yeelight-ex",
       links: %{"source" => "https://github.com/mbcrocci/yeelight-ex"},
       source_url: "https://github.com/mbcrocci/yeelight-ex",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -24,6 +25,14 @@ defmodule Yeelight.MixProject do
   defp description() do
     "This is a library to comunicate with yeelight lamps using Elixir.\n" <>
       "For discovering the lights it uses a UPnP server that should be started using `Discover.start`"
+  end
+
+  defp package() do
+    [
+      name: "yeelight-ex",
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/mbcrocci/yeelight-ex"}
+    ]
   end
 
   # Run "mix help deps" to learn about dependencies.
