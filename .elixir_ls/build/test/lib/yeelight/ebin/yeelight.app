@@ -6,4 +6,4 @@
                         'Elixir.Discover.State','Elixir.Result',
                         'Elixir.Yeelight']},
               {registered,[]},
-              {vsn,"0.1.2"}]}.
+              {vsn,"0.1.3"}]}.
