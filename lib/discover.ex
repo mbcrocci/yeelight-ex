@@ -124,6 +124,7 @@ defmodule Discover do
   end
 
   def handle_info({:udp, _s, _ip, _port, <<"NOTIFY * HTTP/1.1\r\n", device::binary>>}, state) do
+    IO.puts("handle_info => NOTIFY :: Going to crash. Restart with Discover.start")
     {:noreply, device |> parse_device |> update_devices(state)}
   end
 
@@ -133,7 +134,7 @@ defmodule Discover do
     mapped_params =
       Enum.map(raw_params, fn x ->
         case String.split(x, ":", parts: 2) do
-          [k, v] -> {String.to_atom(String.downcase(k)), String.strip(v)}
+          [k, v] -> {String.to_atom(String.downcase(k)), String.trim(v)}
           _ -> nil
         end
       end)
