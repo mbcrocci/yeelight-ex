@@ -19,13 +19,13 @@ Command.toggle |> Command.sendTo(device)
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+The package can be installed
 by adding `yeelight` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:yeelight, "~> 0.1.0"}
+    {:yeelight, "~> 0.1.3"}
   ]
 end
 ```
