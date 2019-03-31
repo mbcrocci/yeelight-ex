@@ -13,12 +13,10 @@ defmodule Result do
   def parse_result({:ok, response}) do
     response
     |> Poison.decode!()
-    |> IO.inspect()
     |> handle_result()
   end
 
   def parse_result({:error, reason}) do
-    IO.inspect(reason)
     {:error, reason}
   end
 

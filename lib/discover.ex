@@ -124,7 +124,6 @@ defmodule Discover do
   end
 
   def handle_info({:udp, _s, _ip, _port, <<"NOTIFY * HTTP/1.1\r\n", device::binary>>}, state) do
-    IO.puts("handle_info => NOTIFY :: Going to crash. Restart with Discover.start")
     {:noreply, device |> parse_device |> update_devices(state)}
   end
 
@@ -147,6 +146,7 @@ defmodule Discover do
       |> Map.delete(:ext)
       |> Map.delete(:server)
       |> Map.delete(:host)
+      |> Map.delete(:nts)
 
     struct!(Device, map)
   end
