@@ -5,7 +5,7 @@ defmodule Yeelight.MixProject do
     [
       app: :yeelight,
       licenses: "MIT License",
-      version: "0.1.4",
+      version: "0.1.5",
       elixir: "~> 1.8",
       description: description(),
       name: "yeelight",
