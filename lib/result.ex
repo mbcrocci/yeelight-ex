@@ -12,8 +12,11 @@
 defmodule Result do
   def parse_result({:ok, response}) do
     response
+    |> String.replace("(", "")
+    |> String.replace(")", "")
     |> Poison.decode!()
     |> handle_result()
+    |> IO.inspect
   end
 
   def parse_result({:error, reason}) do
