@@ -1,45 +1,6 @@
-# Discover request:
-#
-# M-SEARCH * HTTP/1.1\r\n
-# HOST: 239.255.255.250:1982\r\n
-# MAN: "ssdp:discover"\r\n
-# ST: wifi_bulb\r\n
-
-# Discover response:
-# HTTP/1.1 200 OK
-# Cache-Control: max-age=3600
-# Date:
-# Ext:
-# Location: yeelight://192.168.1.239:55443
-# Server: POSIX UPnP/1.0 YGLC/1
-# id: 0x000000000015243f
-# model: color
-# fw_ver: 18
-# support: get_prop set_default set_power toggle set_bright start_cf stop_cf set_scene
-# cron_add cron_get cron_del set_ct_abx set_rgb
-# power: on
-# bright: 100
-# color_mode: 2
-# ct: 4000
-# rgb: 16711680
-# hue: 100
-# sat: 35
-# name: my_bulb
-#
-# ---------------------------------------------------------------------------------------------
-#
-# Notification message will have the following format:
-# {method_pair, params_pair}\r\n
-#
-# with params_pair beeing an object type with the following format:
-# {params_val_pair1, params_val_pair2, ...}
-#
-# Example => {"method": "props", "params":{"Power": "on", "bright: on"}}\r\n
-#
-# ---------------------------------------------------------------------------------------------
-
 defmodule Discover do
   use GenServer
+  import Logger
 
   defmodule State do
     defstruct udp: nil, devices: [], handlers: [], port: nil
@@ -54,9 +15,15 @@ defmodule Discover do
   ST: wifi_bulb\r\n
   """
 
-  def start_link, do: GenServer.start_link(__MODULE__, @port, name: __MODULE__)
+  def start_link do
+    info "Discover::start_link()"
+
+    GenServer.start_link(__MODULE__, @port, name: __MODULE__)
+  end
 
   def start do
+    info "Discover::Start()"
+
     start_link()
     GenServer.call(__MODULE__, :start)
   end
@@ -152,7 +119,7 @@ defmodule Discover do
   end
 
   def update_devices(device, state) when is_map(device) do
-    case state.devices |> Enum.any?(fn d -> d.id == device.id end) do
+    case state.devices |> Enum.any?(&(&1.id == device.id)) do
       false -> Map.update(state, :devices, state.devices, &[device | &1])
       true -> state
     end

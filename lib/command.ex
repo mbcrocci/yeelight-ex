@@ -8,7 +8,11 @@ defmodule Command do
 
   def sendTo(command, device) do
     json = Poison.encode!(command)
-    uri = device.location |> String.replace("yeelight", "http") |> URI.parse()
+
+    uri =
+      device.location
+      |> String.replace("yeelight", "http")
+      |> URI.parse()
 
     {:ok, socket} =
       :gen_tcp.connect(
