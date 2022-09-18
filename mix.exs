@@ -18,14 +18,15 @@ defmodule Yeelight.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     []
   end
 
-  defp description() do
-    "This is a library to comunicate with yeelight lamps using Elixir.\n" <>
-      "For discovering the lights it uses a UPnP server that should be started using `Discover.start`"
+  defp description do
+    """
+    This is a library to comunicate with yeelight lamps using Elixir.
+    For discovering the lights it uses a UPnP server that should be started using `Yeelight.Discover.start`
+    """
   end
 
   defp package() do
@@ -36,7 +37,6 @@ defmodule Yeelight.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:jason, "~> 1.4"},
