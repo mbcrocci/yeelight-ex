@@ -11,6 +11,7 @@ defmodule Yeelight.MixProject do
       name: "yeelight",
       links: %{"source" => "https://github.com/mbcrocci/yeelight-ex"},
       source_url: "https://github.com/mbcrocci/yeelight-ex",
+      extra_applications: [:logger],
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package()
@@ -38,7 +39,7 @@ defmodule Yeelight.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:poison, "~> 3.1"},
+      {:jason, "~> 1.4"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end

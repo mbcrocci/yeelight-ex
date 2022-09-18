@@ -1,6 +1,6 @@
 defmodule Discover do
   use GenServer
-  import Logger
+  require Logger
 
   defmodule State do
     defstruct udp: nil, devices: [], handlers: [], port: nil
@@ -16,13 +16,13 @@ defmodule Discover do
   """
 
   def start_link do
-    info "Discover::start_link()"
+    Logger.info("Discover::start_link()")
 
     GenServer.start_link(__MODULE__, @port, name: __MODULE__)
   end
 
   def start do
-    info "Discover::Start()"
+    Logger.info("Discover::Start()")
 
     start_link()
     GenServer.call(__MODULE__, :start)

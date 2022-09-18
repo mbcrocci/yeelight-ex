@@ -14,9 +14,8 @@ defmodule Result do
     response
     |> String.replace("(", "")
     |> String.replace(")", "")
-    |> Poison.decode!()
+    |> Jason.decode!()
     |> handle_result()
-    |> IO.inspect
   end
 
   def parse_result({:error, reason}) do

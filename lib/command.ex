@@ -1,5 +1,5 @@
 defmodule CommandMessage do
-  @derive[Poison.Encoder]
+  @derive[Jason.Encoder]
   defstruct id: 0, method: "", params: []
 end
 
@@ -7,7 +7,7 @@ defmodule Command do
   defguard is_effect(term) when term == "sudden" or term == "smooth"
 
   def sendTo(command, device) do
-    json = Poison.encode!(command)
+    json = Jason.encode!(command)
 
     uri =
       device.location
