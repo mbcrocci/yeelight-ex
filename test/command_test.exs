@@ -1,10 +1,10 @@
 defmodule CommandTest do
   use ExUnit.Case
-  doctest CommandMessage
+  doctest Command.Message
 
   test "builds a command message" do
     got = Command.build_command("test", [])
-    want = %CommandMessage{id: 0, method: "test", params: []}
+    want = %Command.Message{id: 0, method: "test", params: []}
 
     assert got == want
   end
@@ -12,7 +12,7 @@ defmodule CommandTest do
   test "build a command message with arbitrary params" do
     got = Command.build_command("test", [1, "asd", -1])
 
-    want = %CommandMessage{
+    want = %Command.Message{
       id: 0,
       method: "test",
       params: [1, "asd", -1]
@@ -29,7 +29,7 @@ defmodule CommandTest do
 
     got = Command.start_color_flow(4, 0, flow_expressions)
 
-    want = %CommandMessage{
+    want = %Command.Message{
       id: 0,
       method: "start_cf",
       params: [4, 0, "0, 1, 13158600, 100, 0, 2, 3000, 100"]
