@@ -1,4 +1,4 @@
-defmodule Device do
+defmodule Yeelight.Device do
   defstruct host: "",
             port: 0,
             id: "",

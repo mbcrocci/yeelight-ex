@@ -9,10 +9,10 @@ defmodule Yeelight do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Discover, [])
+      Yeelight.Discover
     ]
 
-    opts = [strategy: :one_for_one, name: Discover.Supervisor]
+    opts = [strategy: :one_for_one, name: Yeelight.Discover.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

@@ -8,50 +8,50 @@ For discovering the lights it uses a UPnP server that should be started using `D
 ```elixir
 
 # start the discovery server
-Discover.start
+Yeelight.Discover.start
 
 # Get the device list
-devices = Discover.devices
+devices = Yeelight.Discover.devices
 
 # Send a command
-Command.toggle |> Command.send_to(device)
+Yeelight.Command.toggle |> Yeelight.Command.send_to(device)
 ```
 
 set color flow sequence
 ```elirix
 color_flow = [
-%FlowExpression{
+%Yeelight.FlowExpression{
   duration: 1000,
   mode: 1,
   r: 255,
   brightness: 100
 },
-%FlowExpression{
+%Yeelight.FlowExpression{
   duration: 1000,
   mode: 1,
   g: 255,
   brightness: 100
 },
-%FlowExpression{
+%Yeelight.FlowExpression{
   duration: 1000,
   mode: 1,
   b: 255,
   brightness: 100
 },
- %FlowExpression{
+ %Yeelight.FlowExpression{
   duration: 1000,
   mode: 2,
   ct: 6500,
   brightness: 100
 },
- %FlowExpression{
+ %Yeelight.FlowExpression{
   duration: 1000,
   mode: 2,
   ct: 1800,
   brightness: 100
 }]
 
-Command.start_color_flow(6, 0, color_flow) |> Command.send_to(hd(devices))
+Yeelight.Command.start_color_flow(6, 0, color_flow) |> Yeelight.Command.send_to(hd(devices))
 ```
 
 ## Installation

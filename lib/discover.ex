@@ -1,4 +1,4 @@
-defmodule Discover do
+defmodule Yeelight.Discover do
   use GenServer
 
   defmodule State do
@@ -119,7 +119,7 @@ defmodule Discover do
         end
       end)
 
-    struct!(Device, map)
+    struct!(Yeelight.Device, map)
   end
 
   def update_devices(device, state) when is_map(device) do
