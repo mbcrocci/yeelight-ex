@@ -95,13 +95,22 @@ defmodule Discover do
   end
 
   def parse_device(body) do
-    raw_params = String.split(body, ["\r\n", "\n"])
+    raw_params = String.split(body, ["\r\n", "\n"], trim: true)
 
     mapped_params =
       Enum.map(raw_params, fn x ->
-        case String.split(x, ":", parts: 2) do
-          [k, v] -> {String.to_atom(String.downcase(k)), String.trim(v)}
-          _ -> nil
+        case String.split(x, ": ", parts: 2) do
+          ["support", v] ->
+            {:support, Enum.map(String.split(v, " ", trim: true), &String.to_atom/1)}
+
+          [k, v] when k in ~w(bright color_mode ct rgb hue sat) ->
+            {String.to_atom(String.downcase(k)), String.to_integer(v)}
+
+          [k, v] ->
+            {String.to_atom(String.downcase(k)), v}
+
+          _ ->
+            nil
         end
       end)
 

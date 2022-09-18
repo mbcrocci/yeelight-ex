@@ -14,7 +14,44 @@ Discover.start
 devices = Discover.devices
 
 # Send a command
-Command.toggle |> Command.sendTo(device)
+Command.toggle |> Command.send_to(device)
+```
+
+set color flow sequence
+```elirix
+color_flow = [
+%FlowExpression{
+  duration: 1000,
+  mode: 1,
+  r: 255,
+  brightness: 100
+},
+%FlowExpression{
+  duration: 1000,
+  mode: 1,
+  g: 255,
+  brightness: 100
+},
+%FlowExpression{
+  duration: 1000,
+  mode: 1,
+  b: 255,
+  brightness: 100
+},
+ %FlowExpression{
+  duration: 1000,
+  mode: 2,
+  ct: 6500,
+  brightness: 100
+},
+ %FlowExpression{
+  duration: 1000,
+  mode: 2,
+  ct: 1800,
+  brightness: 100
+}]
+
+Command.start_color_flow(6, 0, color_flow) |> Command.send_to(hd(devices))
 ```
 
 ## Installation
@@ -25,7 +62,7 @@ by adding `yeelight` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:yeelight, "~> 0.1.3"}
+    {:yeelight, "~> 0.2.0"}
   ]
 end
 ```
