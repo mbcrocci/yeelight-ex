@@ -20,38 +20,35 @@ Yeelight.Command.toggle |> Yeelight.Command.send_to(device)
 set color flow sequence
 ```elirix
 color_flow = [
-%Yeelight.FlowExpression{
-  duration: 1000,
-  mode: :rgb,
-  r: 255,
-  brightness: 100
-},
-%Yeelight.FlowExpression{
-  duration: 1000,
-  mode: :rgb,
-  g: 255,
-  brightness: 100
-},
-%Yeelight.FlowExpression{
-  duration: 1000,
-  mode: :rgb,
-  b: 255,
-  brightness: 100
-},
- %Yeelight.FlowExpression{
-  duration: 1000,
-  mode: :ct,
-  ct: 6500,
-  brightness: 100
-},
- %Yeelight.FlowExpression{
-  duration: 1000,
-  mode: :ct,
-  ct: 1800,
-  brightness: 100
-}]
+  %Yeelight.FlowExpression.RGB{
+    duration: 1000,
+    r: 255,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.RGB{
+    duration: 1000,
+    g: 255,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.RGB{
+    duration: 1000,
+    b: 255,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.ColorTemperature{
+    duration: 1000,
+    temperature: 6500,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.ColorTemperature{
+    duration: 1000,
+    temperature: 1800,
+    brightness: 100
+  }
+]
 
-Yeelight.Command.start_color_flow(6, 0, color_flow) |> Yeelight.Command.send_to(hd(devices))
+Yeelight.Command.start_color_flow(6, 0, color_flow)
+|> Yeelight.Command.send_to(hd(devices))
 ```
 
 ## Installation

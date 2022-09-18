@@ -1,5 +1,4 @@
 defmodule Yeelight.Command do
-  alias Yeelight.FlowExpression
   alias Yeelight.Message
 
   defguard is_effect(term) when term in [:sudden, :smooth]
@@ -87,11 +86,11 @@ defmodule Yeelight.Command do
   @spec set_default() :: Message.t()
   def set_default(), do: build_command("set_default", [])
 
-  @spec start_color_flow(non_neg_integer(), 0..2, list(FlowExpression.t())) :: Message.t()
+  @spec start_color_flow(non_neg_integer(), 0..2, list(map())) :: Message.t()
   def start_color_flow(count, action, flow_expressions) do
     flow_expression_string =
       flow_expressions
-      |> Enum.map(&FlowExpression.to_string/1)
+      |> Enum.map(&to_string/1)
       |> Enum.join(", ")
 
     build_command("start_cf", [count, action, flow_expression_string])
@@ -101,7 +100,7 @@ defmodule Yeelight.Command do
   def stop_color_flow(), do: build_command("stop_cf", [])
 
   def set_scene(method, val1, val2, val3) when is_binary(method) do
-    build_command("set_scene", [val1, val2 , val3])
+    build_command("set_scene", [val1, val2, val3])
   end
 
   @spec start_timer_job(integer()) :: Message.t()

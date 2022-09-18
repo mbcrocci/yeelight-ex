@@ -25,8 +25,8 @@ defmodule Yeelight.CommandTest do
 
   test "flow expression" do
     flow_expressions = [
-      %FlowExpression{mode: 1, r: 200, g: 200, b: 200},
-      %FlowExpression{mode: 2, ct: 3000}
+      %FlowExpression.RGB{r: 200, g: 200, b: 200},
+      %FlowExpression.ColorTemperature{temperature: 3000}
     ]
 
     got = Command.start_color_flow(4, 0, flow_expressions)
