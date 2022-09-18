@@ -15,15 +15,10 @@ defmodule Command do
       |> Map.put(:id, device.command_id)
       |> Jason.encode!()
 
-    uri =
-      device.location
-      |> String.replace("yeelight", "http")
-      |> URI.parse()
-
     {:ok, socket} =
       :gen_tcp.connect(
-        uri.host |> String.to_charlist(),
-        uri.port,
+        String.to_charlist(device.host),
+        device.port,
         [:binary, {:active, false}]
       )
 

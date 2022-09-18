@@ -90,34 +90,34 @@ defmodule Discover do
   end
 
   def parse_device(body) do
-    raw_params = String.split(body, ["\r\n", "\n"], trim: true)
-
-    mapped_params =
-      Enum.map(raw_params, fn x ->
+    map =
+      body
+      |> String.split(["\r\n", "\n"], trim: true)
+      |> Enum.reduce(%{}, fn x, acc ->
         case String.split(x, ": ", parts: 2) do
-          ["support", v] ->
-            {:support, String.split(v, " ", trim: true)}
-
           [k, v] when k in ~w(bright color_mode ct rgb hue sat) ->
-            {String.to_atom(String.downcase(k)), String.to_integer(v)}
+            Map.put(acc, String.to_atom(k), String.to_integer(v))
 
-          [k, v] ->
-            {String.to_atom(String.downcase(k)), v}
+          [k, v] when k in ~w(id model fw_ver power name) ->
+            Map.put(acc, String.to_atom(k), v)
 
-          _ ->
-            nil
+          ["support", v] ->
+            Map.put(acc, :support, String.split(v, " ", trim: true))
+
+          ["Location", location] ->
+            uri =
+              location
+              |> String.replace("yeelight", "http")
+              |> URI.parse()
+
+            acc
+            |> Map.put(:host, uri.host)
+            |> Map.put(:port, uri.port)
+
+          [_k, _v] ->
+            acc
         end
       end)
-
-    map =
-      Enum.reject(mapped_params, &(&1 == nil))
-      |> Map.new()
-      |> Map.delete(:"cache-control")
-      |> Map.delete(:date)
-      |> Map.delete(:ext)
-      |> Map.delete(:server)
-      |> Map.delete(:host)
-      |> Map.delete(:nts)
 
     struct!(Device, map)
   end

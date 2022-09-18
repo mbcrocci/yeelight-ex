@@ -22,14 +22,14 @@ defmodule CommandTest do
   end
 
   test "flow expression" do
-    flow_expressions = [%FlowExpression{r: 200, g: 200, b: 200}, %FlowExpression{ct: 3000}]
+    flow_expressions = [%FlowExpression{mode: 1, r: 200, g: 200, b: 200}, %FlowExpression{mode: 2, ct: 3000}]
 
     got = Command.start_color_flow(4, 0, flow_expressions)
 
     want = %CommandMessage{
       id: 0,
       method: "start_cf",
-      params: [4, 0, "0, 1, 13158600, 100, 0, 1, 16777215, 100"]
+      params: [4, 0, "0, 1, 13158600, 100, 0, 2, 3000, 100"]
     }
 
     assert got == want
