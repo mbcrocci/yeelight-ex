@@ -88,19 +88,34 @@ defmodule Yeelight.Command do
 
   @spec start_color_flow(non_neg_integer(), 0..2, list(map())) :: Message.t()
   def start_color_flow(count, action, flow_expressions) do
-    flow_expression_string =
-      flow_expressions
-      |> Enum.map(&to_string/1)
-      |> Enum.join(", ")
-
-    build_command("start_cf", [count, action, flow_expression_string])
+    build_command("start_cf", [count, action, get_flow_expression_string(flow_expressions)])
   end
 
   @spec stop_color_flow() :: Message.t()
   def stop_color_flow(), do: build_command("stop_cf", [])
 
-  def set_scene(method, val1, val2, val3) when is_binary(method) do
-    build_command("set_scene", [val1, val2, val3])
+  def set_scene_rgb(r, g, b, brightness) do
+    set_scene_rgb(calculate_rgb(r, g, b), brightness)
+  end
+
+  def set_scene_rgb(rgb, brightness) do
+    build_command("set_scene", ["color", rgb, brightness])
+  end
+
+  def set_scene_temperature(temperature, brightness) do
+    build_command("set_scene", ["ct", temperature, brightness])
+  end
+
+  def set_scene_auto_delay_off(time, brightness) do
+    build_command("set_scene", ["auto_delay_off", brightness, time])
+  end
+
+  def set_scene_color_flow(count, action, flow_expressions) do
+    build_command("set_scene", ["cf", count, action, get_flow_expression_string(flow_expressions)])
+  end
+
+  def set_scene_hsv(hue, saturation, brightness) do
+    build_command("set_scene", ["hsv", hue, saturation, brightness])
   end
 
   @spec start_timer_job(integer()) :: Message.t()
@@ -162,5 +177,11 @@ defmodule Yeelight.Command do
 
   def calculate_rgb(r, g, b) do
     r * (256 * 256) + g * 256 + b
+  end
+
+  defp get_flow_expression_string(flow_expressions) do
+    flow_expressions
+    |> Enum.map(&to_string/1)
+    |> Enum.join(", ")
   end
 end
