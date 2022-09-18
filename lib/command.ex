@@ -101,7 +101,7 @@ defmodule Yeelight.Command do
   def stop_color_flow(), do: build_command("stop_cf", [])
 
   def set_scene(method, val1, val2, val3) when is_binary(method) do
-    build_command("set_scene", [val1, val2 | val3])
+    build_command("set_scene", [val1, val2 , val3])
   end
 
   @spec start_timer_job(integer()) :: Message.t()

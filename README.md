@@ -22,31 +22,31 @@ set color flow sequence
 color_flow = [
 %Yeelight.FlowExpression{
   duration: 1000,
-  mode: 1,
+  mode: :rgb,
   r: 255,
   brightness: 100
 },
 %Yeelight.FlowExpression{
   duration: 1000,
-  mode: 1,
+  mode: :rgb,
   g: 255,
   brightness: 100
 },
 %Yeelight.FlowExpression{
   duration: 1000,
-  mode: 1,
+  mode: :rgb,
   b: 255,
   brightness: 100
 },
  %Yeelight.FlowExpression{
   duration: 1000,
-  mode: 2,
+  mode: :ct,
   ct: 6500,
   brightness: 100
 },
  %Yeelight.FlowExpression{
   duration: 1000,
-  mode: 2,
+  mode: :ct,
   ct: 1800,
   brightness: 100
 }]
