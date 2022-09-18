@@ -1,6 +1,5 @@
 defmodule Discover do
   use GenServer
-  require Logger
 
   defmodule State do
     defstruct udp: nil, devices: [], handlers: [], port: nil
@@ -16,14 +15,10 @@ defmodule Discover do
   """
 
   def start_link do
-    Logger.info("Discover::start_link()")
-
     GenServer.start_link(__MODULE__, @port, name: __MODULE__)
   end
 
   def start do
-    Logger.info("Discover::Start()")
-
     start_link()
     GenServer.call(__MODULE__, :start)
   end
@@ -101,7 +96,7 @@ defmodule Discover do
       Enum.map(raw_params, fn x ->
         case String.split(x, ": ", parts: 2) do
           ["support", v] ->
-            {:support, Enum.map(String.split(v, " ", trim: true), &String.to_atom/1)}
+            {:support, String.split(v, " ", trim: true)}
 
           [k, v] when k in ~w(bright color_mode ct rgb hue sat) ->
             {String.to_atom(String.downcase(k)), String.to_integer(v)}
