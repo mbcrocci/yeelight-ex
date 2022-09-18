@@ -8,7 +8,7 @@ defmodule Yeelight.FlowExpression do
     g: integer,
     b: integer
    }
-  defstruct duration: 0, mode: 1, ct: 0, brightness: 100, r: 0, g: 0, b: 0
+  defstruct duration: 0, mode: :rgb, ct: 0, brightness: 100, r: 0, g: 0, b: 0
 
   def to_string(%__MODULE__{mode: :rgb} = expression) do
     value = Yeelight.Command.calculate_rgb(expression.r, expression.g, expression.b)
