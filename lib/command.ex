@@ -14,6 +14,7 @@ defmodule Command do
       |> Map.from_struct()
       |> Map.put(:id, device.command_id)
       |> Jason.encode!()
+      |> Kernel.<>("\r\n")
 
     {:ok, socket} =
       :gen_tcp.connect(
@@ -22,7 +23,7 @@ defmodule Command do
         [:binary, {:active, false}]
       )
 
-    :ok = :gen_tcp.send(socket, json <> "\r\n")
+    :ok = :gen_tcp.send(socket, json)
     result = :gen_tcp.recv(socket, 0)
     :ok = :gen_tcp.close(socket)
 
@@ -56,7 +57,7 @@ defmodule Command do
     set_rgb(r, g, b, effect, duration)
   end
 
-  @spec set_rgb(0..16_777_215, effect(), duration()) :: CommandMessage.t()
+  @spec set_rgb(0..0xFFFFFF, effect(), duration()) :: CommandMessage.t()
   def set_rgb(rgb, effect, duration) when is_effect(effect) do
     build_command("set_rgb", [rgb, effect, duration])
   end
