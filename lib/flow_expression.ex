@@ -1,4 +1,27 @@
 defmodule Yeelight.FlowExpression.RGB do
+  @moduledoc """
+  ```elixir
+  color_flow = [
+    %Yeelight.FlowExpression.RGB{
+      duration: 1000,
+      r: 255,
+      brightness: 100
+    },
+    %Yeelight.FlowExpression.RGB{
+      duration: 1000,
+      g: 255,
+      brightness: 100
+    },
+    %Yeelight.FlowExpression.RGB{
+      duration: 1000,
+      b: 255,
+      brightness: 100
+  ]
+
+  Yeelight.Command.start_color_flow(6, 0, color_flow)
+  |> Yeelight.Command.send_to(hd(devices))
+  ```
+  """
   @type t :: %__MODULE__{
           duration: integer,
           brightness: integer,
@@ -17,6 +40,26 @@ defmodule Yeelight.FlowExpression.RGB do
 end
 
 defmodule Yeelight.FlowExpression.ColorTemperature do
+  @moduledoc """
+  ```
+  color_flow = [
+    %Yeelight.FlowExpression.ColorTemperature{
+       duration: 1000,
+       temperature: 6500,
+       brightness: 100
+    },
+    %Yeelight.FlowExpression.ColorTemperature{
+      duration: 1000,
+      temperature: 1800,
+      brightness: 100
+    }
+  ]
+
+  Yeelight.Command.start_color_flow(6, 0, color_flow)
+  |> Yeelight.Command.send_to(hd(devices))
+
+  ```
+  """
   @type t :: %__MODULE__{
           duration: integer,
           temperature: integer,
@@ -32,6 +75,19 @@ defmodule Yeelight.FlowExpression.ColorTemperature do
 end
 
 defmodule Yeelight.FlowExpression.Sleep do
+  @moduledoc """
+  ```
+  color_flow = [
+    %Yeelight.FlowExpression.Sleep{
+      duration: 1000
+    }
+  ]
+
+  Yeelight.Command.start_color_flow(6, 0, color_flow)
+  |> Yeelight.Command.send_to(hd(devices))
+
+  ```
+  """
   @type t :: %__MODULE__{
           duration: integer
         }

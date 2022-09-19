@@ -1,4 +1,5 @@
 defmodule Yeelight.Message do
+  @moduledoc false
   defstruct id: 0, method: "", params: []
 
   @type t :: %__MODULE__{

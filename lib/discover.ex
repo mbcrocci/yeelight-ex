@@ -1,7 +1,17 @@
 defmodule Yeelight.Discover do
+  @moduledoc """
+  start the discovery server and get the device list
+  ```
+  Yeelight.Discover.start()
+  :timer.sleep(1000)
+
+  devices = Yeelight.Discover.devices()
+  ```
+  """
   use GenServer
 
   defmodule State do
+    @moduledoc false
     defstruct udp: nil, devices: [], handlers: [], port: nil
   end
 
@@ -68,7 +78,7 @@ defmodule Yeelight.Discover do
   @impl true
   def handle_info(:discover, state) do
     Process.send_after(self(), {:send, @discover_message}, (:rand.uniform() * 1000) |> round)
-    Process.send_after(self(), :discover, 61000)
+    Process.send_after(self(), :discover, 61_000)
     {:noreply, state}
   end
 

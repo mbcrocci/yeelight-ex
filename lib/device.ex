@@ -1,4 +1,5 @@
 defmodule Yeelight.Device do
+  @moduledoc false
   defstruct host: "",
             port: 0,
             id: "",

@@ -1,4 +1,11 @@
 defmodule Yeelight.Command do
+  @moduledoc """
+  create command and send to device
+  ```
+  Yeelight.Command.set_scene_auto_delay_off(1, 5)
+  |> Yeelight.Command.send_to(device)
+  ```
+  """
   alias Yeelight.Message
 
   defguard is_effect(term) when term in [:sudden, :smooth]
@@ -180,8 +187,6 @@ defmodule Yeelight.Command do
   end
 
   defp get_flow_expression_string(flow_expressions) do
-    flow_expressions
-    |> Enum.map(&to_string/1)
-    |> Enum.join(", ")
+    Enum.map_join(flow_expressions, ", ", &to_string/1)
   end
 end
