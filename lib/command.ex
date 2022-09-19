@@ -8,9 +8,7 @@ defmodule Yeelight.Command do
   """
   alias Yeelight.Message
 
-  defguard is_effect(term) when term in [:sudden, :smooth]
-  @type effect :: :sudden | :smooth
-  @type duration :: non_neg_integer()
+  @type duration :: non_neg_integer() | nil
   @power_on_mode %{normal: 0, ct: 1, rgb: 2, hsv: 3, cf: 4, night: 5}
 
   def send_to(command, device) do
@@ -46,45 +44,46 @@ defmodule Yeelight.Command do
     build_command("get_prop", properties)
   end
 
-  @spec set_temperature(1700..6500, effect(), duration()) :: Message.t()
-  def set_temperature(temperature, effect, duration) when is_effect(effect) do
-    build_command("set_ct_abx", [temperature, effect, duration])
+  @spec set_temperature(1700..6500, duration()) :: Message.t()
+  def set_temperature(temperature, duration) do
+    build_command("set_ct_abx", [temperature | get_effect(duration)])
   end
 
-  @spec set_rgb(0..255, 0..255, 0..255, effect(), duration()) :: Message.t()
-  def set_rgb(r, g, b, effect, duration) when is_effect(effect) do
+  @spec set_rgb(0..255, 0..255, 0..255, duration()) :: Message.t()
+  def set_rgb(r, g, b, duration \\ nil) do
     calculate_rgb(r, g, b)
-    |> set_rgb(effect, duration)
+    |> set_rgb(duration)
   end
 
-  @spec set_rgb(list(0..255), effect(), duration()) :: Message.t()
-  def set_rgb([r, g, b], effect, duration) when is_effect(effect) do
-    set_rgb(r, g, b, effect, duration)
+  def set_rgb(rgb, duration \\ nil)
+  @spec set_rgb(list(0..255), duration()) :: Message.t()
+  def set_rgb([r, g, b], duration) do
+    set_rgb(r, g, b, duration)
   end
 
-  @spec set_rgb(0..0xFFFFFF, effect(), duration()) :: Message.t()
-  def set_rgb(rgb, effect, duration) when is_effect(effect) do
-    build_command("set_rgb", [rgb, effect, duration])
+  @spec set_rgb(0..0xFFFFFF, duration()) :: Message.t()
+  def set_rgb(rgb, duration) do
+    build_command("set_rgb", [rgb | get_effect(duration)])
   end
 
-  @spec set_hsv(0..359, 0..100, effect(), duration()) :: Message.t()
-  def set_hsv(hue, saturation, effect, duration) when is_effect(effect) do
-    build_command("set_hsv", [hue, saturation, effect, duration])
+  @spec set_hsv(0..359, 0..100, duration()) :: Message.t()
+  def set_hsv(hue, saturation, duration \\ nil) do
+    build_command("set_hsv", [hue, saturation | get_effect(duration)])
   end
 
-  @spec set_bright(1..100, effect(), duration()) :: Message.t()
-  def set_bright(brightness, effect, duration) when is_effect(effect) do
-    build_command("set_bright", [brightness, effect, duration])
+  @spec set_bright(1..100, duration()) :: Message.t()
+  def set_bright(brightness, duration \\ nil) do
+    build_command("set_bright", [brightness | get_effect(duration)])
   end
 
-  @spec set_power_on(effect(), duration(), atom()) :: Message.t()
-  def set_power_on(effect, duration, mode \\ :normal) when is_effect(effect) do
-    build_command("set_power", ["on", effect, duration, Map.get(@power_on_mode, mode)])
+  @spec set_power_on(atom(), duration()) :: Message.t()
+  def set_power_on(mode, duration \\ nil) do
+    build_command("set_power", ["on"] ++ get_effect(duration) ++ [Map.get(@power_on_mode, mode)])
   end
 
-  @spec set_power_off(effect(), duration()) :: Message.t()
-  def set_power_off(effect, duration) when is_effect(effect) do
-    build_command("set_power", ["off", effect, duration])
+  @spec set_power_off(duration()) :: Message.t()
+  def set_power_off(duration \\ nil) do
+    build_command("set_power", ["off" | get_effect(duration)])
   end
 
   @spec toggle() :: Message.t()
@@ -188,5 +187,9 @@ defmodule Yeelight.Command do
 
   defp get_flow_expression_string(flow_expressions) do
     Enum.map_join(flow_expressions, ", ", &to_string/1)
+  end
+
+  defp get_effect(duration) do
+    if duration, do: [:smooth, duration], else: [:sudden, 0]
   end
 end
