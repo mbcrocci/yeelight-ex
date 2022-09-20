@@ -8,13 +8,47 @@ For discovering the lights it uses a UPnP server that should be started using `D
 ```elixir
 
 # start the discovery server
-Discover.start
+Yeelight.Discover.start
 
 # Get the device list
-devices = Discover.devices
+devices = Yeelight.Discover.devices
 
 # Send a command
-Command.toggle |> Command.sendTo(device)
+Yeelight.Command.toggle |> Yeelight.Command.send_to(device)
+```
+
+set color flow sequence
+```elirix
+color_flow = [
+  %Yeelight.FlowExpression.RGB{
+    duration: 1000,
+    r: 255,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.RGB{
+    duration: 1000,
+    g: 255,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.RGB{
+    duration: 1000,
+    b: 255,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.ColorTemperature{
+    duration: 1000,
+    temperature: 6500,
+    brightness: 100
+  },
+  %Yeelight.FlowExpression.ColorTemperature{
+    duration: 1000,
+    temperature: 1800,
+    brightness: 100
+  }
+]
+
+Yeelight.Command.start_color_flow(6, 0, color_flow)
+|> Yeelight.Command.send_to(hd(devices))
 ```
 
 ## Installation
@@ -25,7 +59,7 @@ by adding `yeelight` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:yeelight, "~> 0.1.3"}
+    {:yeelight, "~> 0.2.0"}
   ]
 end
 ```

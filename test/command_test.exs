@@ -1,21 +1,40 @@
-defmodule CommandTest do
+defmodule Yeelight.CommandTest do
   use ExUnit.Case
-  doctest CommandMessage
+  alias Yeelight.Command
+  alias Yeelight.FlowExpression
+  alias Yeelight.Message
 
   test "builds a command message" do
-    got = Command.build_command(1, "test", [])
-    want = %CommandMessage{id: 1, method: "test", params: []}
+    got = Command.build_command("test", [])
+    want = %Message{id: 0, method: "test", params: []}
 
     assert got == want
   end
 
   test "build a command message with arbitrary params" do
-    got = Command.build_command(12, "test", [1, "asd", -1])
+    got = Command.build_command("test", [1, "asd", -1])
 
-    want = %CommandMessage{
-      id: 12,
+    want = %Message{
+      id: 0,
       method: "test",
       params: [1, "asd", -1]
+    }
+
+    assert got == want
+  end
+
+  test "flow expression" do
+    flow_expressions = [
+      %FlowExpression.RGB{r: 200, g: 200, b: 200},
+      %FlowExpression.ColorTemperature{temperature: 3000}
+    ]
+
+    got = Command.start_color_flow(4, 0, flow_expressions)
+
+    want = %Message{
+      id: 0,
+      method: "start_cf",
+      params: [4, 0, "0, 1, 13158600, 100, 0, 2, 3000, 100"]
     }
 
     assert got == want

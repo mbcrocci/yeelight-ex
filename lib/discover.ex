@@ -1,8 +1,17 @@
-defmodule Discover do
+defmodule Yeelight.Discover do
+  @moduledoc """
+  start the discovery server and get the device list
+  ```
+  Yeelight.Discover.start()
+  :timer.sleep(1000)
+
+  devices = Yeelight.Discover.devices()
+  ```
+  """
   use GenServer
-  import Logger
 
   defmodule State do
+    @moduledoc false
     defstruct udp: nil, devices: [], handlers: [], port: nil
   end
 
@@ -16,14 +25,10 @@ defmodule Discover do
   """
 
   def start_link do
-    info "Discover::start_link()"
-
     GenServer.start_link(__MODULE__, @port, name: __MODULE__)
   end
 
   def start do
-    info "Discover::Start()"
-
     start_link()
     GenServer.call(__MODULE__, :start)
   end
@@ -73,7 +78,7 @@ defmodule Discover do
   @impl true
   def handle_info(:discover, state) do
     Process.send_after(self(), {:send, @discover_message}, (:rand.uniform() * 1000) |> round)
-    Process.send_after(self(), :discover, 61000)
+    Process.send_after(self(), :discover, 61_000)
     {:noreply, state}
   end
 
@@ -95,27 +100,36 @@ defmodule Discover do
   end
 
   def parse_device(body) do
-    raw_params = String.split(body, ["\r\n", "\n"])
+    map =
+      body
+      |> String.split(["\r\n", "\n"], trim: true)
+      |> Enum.reduce(%{}, fn x, acc ->
+        case String.split(x, ": ", parts: 2) do
+          [k, v] when k in ~w(bright color_mode ct rgb hue sat) ->
+            Map.put(acc, String.to_atom(k), String.to_integer(v))
 
-    mapped_params =
-      Enum.map(raw_params, fn x ->
-        case String.split(x, ":", parts: 2) do
-          [k, v] -> {String.to_atom(String.downcase(k)), String.trim(v)}
-          _ -> nil
+          [k, v] when k in ~w(id model fw_ver power name) ->
+            Map.put(acc, String.to_atom(k), v)
+
+          ["support", v] ->
+            Map.put(acc, :support, String.split(v, " ", trim: true))
+
+          ["Location", location] ->
+            uri =
+              location
+              |> String.replace("yeelight", "http")
+              |> URI.parse()
+
+            acc
+            |> Map.put(:host, uri.host)
+            |> Map.put(:port, uri.port)
+
+          [_k, _v] ->
+            acc
         end
       end)
 
-    map =
-      Enum.reject(mapped_params, &(&1 == nil))
-      |> Map.new()
-      |> Map.delete(:"cache-control")
-      |> Map.delete(:date)
-      |> Map.delete(:ext)
-      |> Map.delete(:server)
-      |> Map.delete(:host)
-      |> Map.delete(:nts)
-
-    struct!(Device, map)
+    struct!(Yeelight.Device, map)
   end
 
   def update_devices(device, state) when is_map(device) do

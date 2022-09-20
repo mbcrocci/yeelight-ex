@@ -1,6 +1,8 @@
-defmodule Device do
-  defstruct location: "",
-            id: 0,
+defmodule Yeelight.Device do
+  @moduledoc false
+  defstruct host: "",
+            port: 0,
+            id: "",
             model: "",
             fw_ver: 0,
             support: [],
@@ -11,5 +13,6 @@ defmodule Device do
             rgb: 0,
             hue: 0,
             sat: 0,
-            name: ""
+            name: "",
+            command_id: 0
 end
